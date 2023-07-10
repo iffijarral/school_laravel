@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\PrevExamController;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\SessionController;
 use App\Http\Controllers\Api\TestController;
+use App\Http\Controllers\Api\StatisticsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,10 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+Route::get('/hello', function () {
+    return 'Hello, World!';
+});
 
 // User Routes
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -59,6 +64,11 @@ Route::get('prevexams/{id}', [PrevExamController::class, 'show']);
 
 // Retrieve user from cookie
 Route::middleware(['SanctumTokenFromCookie', 'auth:sanctum'])->get('/session', [SessionController::class, 'index']);
+
+// Retrieve statistics
+Route::middleware(['SanctumTokenFromCookie', 'auth:sanctum'])->get('/statistics', [StatisticsController::class, 'index']);
+// Save statistics
+Route::middleware(['SanctumTokenFromCookie', 'auth:sanctum'])->post('/statistics', [StatisticsController::class, 'store']);
 
 // Payment
 Route::middleware(['SanctumTokenFromCookie', 'auth:sanctum'])->post('create-payment-intent', [PaymentController::class, 'index']);

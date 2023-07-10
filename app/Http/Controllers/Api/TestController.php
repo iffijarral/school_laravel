@@ -43,9 +43,10 @@ class TestController extends Controller
      */
     public function show(string $id)
     {                
+
         /** @var \App\Models\Test $test */
         $test = Test::find($id);
-
+        
         $test->questions;
 
         if (!$test) {
@@ -63,7 +64,7 @@ class TestController extends Controller
         if($id != 1)
             return response()->json(['error' => 'Unauthorized request'], 401);                    
         /** @var \App\Models\Test $test */
-        $test = Test::find(4);
+        $test = Test::find(4); // 4 is example test id
 
         $test->questions;
 

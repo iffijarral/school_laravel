@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Package::class, 'UserPackages', 'UserId', 'PackageId');        
     }
+
+    public function statistics()
+    {
+        return $this->hasMany(Statistics::class, 'UserId');
+    }
 }
