@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\CreateState;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class SessionController extends Controller
 {
+    // Following is a trait, which has a function to generate user state
+    use CreateState;
+
     /**
      * Display a listing of the resource.
      */
@@ -17,16 +21,24 @@ class SessionController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();                
         
-        // Load packages info in $user object
-        $user->packages;
+        // $numberOfTests = 0;
+        // // Load packages info in $user object
+        // $packages = $user->packages;
 
-        $state = [
-            'name'       => $user->name,
-            'email'      => $user->email,
-            'noOfTests'  => $user->packages[0]->numberoftests,
-            'status'     => $user->status,
-            'isLoggedIn' => true    
-        ];
+        // if(isset($packages) && count($packages) > 0) {
+        //     $numberOfTests = $packages[0]->numberoftests;
+        // }
+
+        // $state = [
+        //     'name'       => $user->name,
+        //     'email'      => $user->email,
+        //     'noOfTests'  => $numberOfTests,
+        //     'status'     => $user->status,
+        //     'isLoggedIn' => true    
+        // ];
+        
+        // Get state from CreateState trait
+        $state = $this->createUserState($user);
 
         return response()->json($state);
     }

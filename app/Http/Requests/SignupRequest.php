@@ -25,7 +25,7 @@ class SignupRequest extends FormRequest
     {
         return [
             'name' => ['required', 'min:3'],
-            'email' => ['required', 'email', Rule::unique('users', 'email')],
+            'email' => ['required', 'email', Rule::unique('Users', 'email')],
             'password' => [
                 'required',
                 'confirmed',
@@ -39,3 +39,4 @@ class SignupRequest extends FormRequest
         ];
     }
 }
+ 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\CreateState;
 use App\Models\Package;
 use App\Models\Payment;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use Stripe\Stripe;
 
 class PaymentController extends Controller
 {
+    use CreateState;
     /**
      * Display a listing of the resource.
      */
@@ -25,12 +27,12 @@ class PaymentController extends Controller
         
         $packageId = $request->packageID;
         $receipt_email = $request->receipt_email;
-
+        
         /** @var \App\Models\Package $package */
         $package = Package::find($packageId);
 
         $amout = $package->price;        
-
+        
         $paymentIntent = \Stripe\PaymentIntent::create([
             'amount' => $amout*100,
             'currency' => 'dkk',
@@ -87,10 +89,32 @@ class PaymentController extends Controller
                 
                 // Following save method updates Users table, moreover Auth::user is updated automatically.
                 $user->save();
-    
+
+                // $userPackages = $user->packages;
+            
+                // $numOfTests = 0;
+
+                // if (isset($userPackages) && count($userPackages) > 0) {
+
+                //     $length = count($userPackages);
+
+                //     $numOfTests = $userPackages[$length-1]->numberoftests;                
+                // } 
+                
+                // $state = [
+                //     'name'       => $user->name,
+                //     'email'      => $user->email,
+                //     'noOfTests'  => $numOfTests,
+                //     'status'     => $user->status,
+                //     'isLoggedIn' => true    
+                // ];
+                
+                // Get state from CreateState trait
+                $state = $this->createUserState($user);
+
                 $message = 'User Package saved & status updated successfully';                
     
-                return response(compact('user', 'message'));            
+                return response(compact('state', 'message'));            
     
             } else {
                 // Attachment failed

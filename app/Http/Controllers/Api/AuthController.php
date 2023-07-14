@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignupRequest;
+use App\Http\Traits\CreateState;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -15,8 +16,10 @@ use Illuminate\Validation\Rules\Password as PasswordRule;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\URL;
 
+
 class AuthController extends Controller
 {    
+    use CreateState;
     // authenticate              
     public function login(Request $request) {
 
@@ -34,22 +37,29 @@ class AuthController extends Controller
             /** @var \App\Models\User $user */
             $user = Auth::user();            
 
-            // Load packages info in $user object
-            $userPackages = $user->packages;
+            // // Load packages info in $user object
+            // $userPackages = $user->packages;
             
-            $numOfTests = 0;
+            // $numOfTests = 0;
 
-            if (isset($userPackages) && count($userPackages) > 0) {
-                $numOfTests = $userPackages[0]->numberoftests;                
-            } 
+            // if (isset($userPackages) && count($userPackages) > 0) {
+                
+            //     $length = count($userPackages);
+
+            //     // Fetch last purchased package info
+            //     $numOfTests = $userPackages[$length-1]->numberoftests;             
+            // } 
             
-            $state = [
-                'name'       => $user->name,
-                'email'      => $user->email,
-                'noOfTests'  => $numOfTests,
-                'status'     => $user->status,
-                'isLoggedIn' => true    
-            ];
+            // $state = [
+            //     'name'       => $user->name,
+            //     'email'      => $user->email,
+            //     'noOfTests'  => $numOfTests,
+            //     'status'     => $user->status,
+            //     'isLoggedIn' => true    
+            // ];
+            
+            // Get state from CreateState trait
+            $state = $this->createUserState($user);
             
             // Generate an API token for the user
             $token = $user->createToken('API Token')->plainTextToken;
